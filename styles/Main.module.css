@@ -67,7 +67,8 @@
   border-radius: 5px;
   padding: 0.75rem;
   font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+  font-family: Menlo, Monaco, Lucida Console,
+    Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
@@ -112,6 +113,15 @@
 
 .logo {
   height: 1em;
+}
+
+.deleteButton {
+  color: white;
+  background: red;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
