@@ -14,15 +14,17 @@ const prisma = new PrismaClient()
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await prisma.post.findMany({
     orderBy: {
-      id: 'desc'
-    }
+      id: 'desc',
+    },
   })
   return {
     props: {
       posts,
     },
-    // Revalidate will serve the static page and re-render at runtime at most every 30 seconds
-    revalidate: 30,
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every second
+    revalidate: 5,
   }
 }
 
@@ -49,7 +51,16 @@ const Home: React.FC<HomeProps> = (props) => {
               createPost(setLoading)
             }}
           >
-            {<Loader visible={isLoading} type="Oval" color="white" height="15" width="15" />} Create Post 
+            {
+              <Loader
+                visible={isLoading}
+                type="Oval"
+                color="white"
+                height="15"
+                width="15"
+              />
+            }{' '}
+            Create Post
           </button>
           <button
             className={styles.createButton}
@@ -59,10 +70,7 @@ const Home: React.FC<HomeProps> = (props) => {
           >
             Reload
           </button>
-          <button
-            className={styles.createButton}
-            onClick={resetPosts}
-          >
+          <button className={styles.createButton} onClick={resetPosts}>
             Reset Posts
           </button>
         </div>
