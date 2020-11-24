@@ -17,10 +17,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { id: String(post.id) },
   }))
 
-  return {
-    paths,
+  return { 
+    paths, 
     // If an ID is requested that isn't defined here, fallback will incrementally generate the page
-    fallback: true
+    fallback: true 
   }
 }
 
@@ -36,13 +36,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       post: matchedPost,
     },
   }
-}
-
-const deletePost = async (id: number): Promise<void> => {
-  await fetch(`http://localhost:3000/api/post/${id}`, {
-    method: 'DELETE',
-  })
-  Router.push('/')
 }
 
 interface PostPageProps {
@@ -77,3 +70,10 @@ const PostPage: React.FC<PostPageProps> = (props) => {
 }
 
 export default PostPage
+
+const deletePost = async (id: number): Promise<void> => {
+  await fetch(`/api/post/${id}`, {
+    method: 'DELETE',
+  })
+  Router.push('/')
+}

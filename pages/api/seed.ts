@@ -7,6 +7,7 @@ const prisma = new PrismaClient()
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const promises = []
+  promises.push(prisma.post.deleteMany({}))
   for (const post of posts) {
     promises.push(
       prisma.post.create({

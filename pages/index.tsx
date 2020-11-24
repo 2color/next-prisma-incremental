@@ -1,20 +1,27 @@
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import Loader from 'react-loader-spinner'
 import styles from '../styles/Main.module.css'
 import { Post } from './../data/posts'
 import { PrismaClient } from '@prisma/client'
+import Router from 'next/router'
+import { useState } from 'react'
 
 const prisma = new PrismaClient()
 
 // This function gets called at build time
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await prisma.post.findMany()
+  const posts = await prisma.post.findMany({
+    orderBy: {
+      id: 'desc'
+    }
+  })
   return {
     props: {
       posts,
     },
-    // Revalidate will refetch at runtime
+    // Revalidate will serve the static page and re-render at runtime at most every 30 seconds
     revalidate: 30,
   }
 }
@@ -24,6 +31,8 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = (props) => {
+  const [isLoading, setLoading] = useState(false)
+
   return (
     <div className={styles.container}>
       <Head>
@@ -33,7 +42,30 @@ const Home: React.FC<HomeProps> = (props) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to the Blog!</h1>
-
+        <div className={styles.buttons}>
+          <button
+            className={styles.createButton}
+            onClick={() => {
+              createPost(setLoading)
+            }}
+          >
+            {<Loader visible={isLoading} type="Oval" color="white" height="15" width="15" />} Create Post 
+          </button>
+          <button
+            className={styles.createButton}
+            onClick={() => {
+              Router.reload()
+            }}
+          >
+            Reload
+          </button>
+          <button
+            className={styles.createButton}
+            onClick={resetPosts}
+          >
+            Reset Posts
+          </button>
+        </div>
         <div className={styles.grid}>
           {props.posts.map((p: Post) => {
             return (
@@ -55,6 +87,20 @@ const Home: React.FC<HomeProps> = (props) => {
       </main>
     </div>
   )
+}
+const createPost = async (setLoading): Promise<void> => {
+  setLoading(true)
+  await fetch(`/api/post`, {
+    method: 'POST',
+  })
+  setLoading(false)
+}
+
+const resetPosts = async (): Promise<void> => {
+  await fetch(`/api/seed`, {
+    method: 'POST',
+  })
+  Router.reload()
 }
 
 export default Home

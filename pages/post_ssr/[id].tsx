@@ -46,7 +46,7 @@ const PostPage: React.FC<PostPageProps> = (props) => {
 export default PostPage
 
 const deletePost = async (id: number): Promise<void> => {
-  await fetch(`http://localhost:3000/api/post/${id}`, {
+  await fetch(`/api/post/${id}`, {
     method: 'DELETE',
   })
   Router.push('/')
