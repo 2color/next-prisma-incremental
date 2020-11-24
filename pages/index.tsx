@@ -1,23 +1,26 @@
-import { GetStaticProps } from 'next';
-import Head from 'next/head';
-import Link from 'next/link';
-import styles from '../styles/Main.module.css';
-import { Post } from './../data/posts';
-import { PrismaClient } from '@prisma/client';
+import { GetStaticProps } from 'next'
+import Head from 'next/head'
+import Link from 'next/link'
+import styles from '../styles/Main.module.css'
+import { Post } from './../data/posts'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
+// This function gets called at build time
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany()
   return {
     props: {
-      posts
-    }
-  };
-};
+      posts,
+    },
+    // Revalidate will refetch at runtime
+    revalidate: 30,
+  }
+}
 
 interface HomeProps {
-  posts: Post[];
+  posts: Post[]
 }
 
 const Home: React.FC<HomeProps> = (props) => {
@@ -29,9 +32,7 @@ const Home: React.FC<HomeProps> = (props) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to the Blog!
-        </h1>
+        <h1 className={styles.title}>Welcome to the Blog!</h1>
 
         <div className={styles.grid}>
           {props.posts.map((p: Post) => {
@@ -42,12 +43,12 @@ const Home: React.FC<HomeProps> = (props) => {
                   <p>{p.excerpt}</p>
                 </a>
               </Link>
-            );
+            )
           })}
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
