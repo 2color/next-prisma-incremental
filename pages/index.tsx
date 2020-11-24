@@ -82,11 +82,24 @@ const Home: React.FC<HomeProps> = (props) => {
                 <p>{p.excerpt}</p>
                 <div className="buttons">
                   <Link href={`/post_ssr/${p.id}`} key={p.id}>
-                    <button>Open SSR</button>
+                    <button className={styles.navigationButton}>
+                      Open SSR
+                    </button>
                   </Link>
                   <Link href={`/post_inc/${p.id}`} key={p.id}>
-                    <button>Open static</button>
+                    <button className={styles.navigationButton}>
+                      Open static
+                    </button>
                   </Link>
+
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => {
+                      deletePost(p.id)
+                    }}
+                  >
+                    Delete Post
+                  </button>
                 </div>
               </a>
             )
@@ -107,6 +120,13 @@ const createPost = async (setLoading): Promise<void> => {
 const resetPosts = async (): Promise<void> => {
   await fetch(`/api/seed`, {
     method: 'POST',
+  })
+  Router.reload()
+}
+
+const deletePost = async (id: number): Promise<void> => {
+  await fetch(`/api/post/${id}`, {
+    method: 'DELETE',
   })
   Router.reload()
 }

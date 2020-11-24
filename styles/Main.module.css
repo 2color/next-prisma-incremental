@@ -92,12 +92,6 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.card button:hover,
-.card button:focus,
-.card button:active {
-  background-color: #0152ae;
-}
-
 .card h3 {
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
@@ -109,16 +103,22 @@
   line-height: 1.5;
 }
 
-.card button {
+.navigationButton {
   color: white;
   background-color: #2289ff;
   cursor: pointer;
-  margin: 1rem 1rem 0 0;
+  margin: 5px 5px 5px 0;
   padding: 10px 15px;
   border: none;
   border-radius: 10px;
   text-align: center;
   transition: all 0.2s;
+}
+
+.navigationButton:hover,
+.navigationButton:focus,
+.navigationButton:active {
+  background-color: #0152ae;
 }
 
 .logo {
@@ -132,6 +132,12 @@
   padding: 10px 15px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.deleteButton:hover,
+.deleteButton:focus,
+.deleteButton:active {
+  background-color: rgb(167, 0, 0);
 }
 
 .buttons {
