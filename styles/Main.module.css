@@ -67,8 +67,7 @@
   border-radius: 5px;
   padding: 0.75rem;
   font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console,
-    Liberation Mono, DejaVu Sans Mono,
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
@@ -93,11 +92,10 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.card:hover,
-.card:focus,
-.card:active {
-  color: #0070f3;
-  border-color: #0070f3;
+.card button:hover,
+.card button:focus,
+.card button:active {
+  background-color: #0152ae;
 }
 
 .card h3 {
@@ -109,6 +107,18 @@
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
+}
+
+.card button {
+  color: white;
+  background-color:#2289ff;
+  cursor: pointer;
+  margin: 1rem 1rem 0 0;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.2s;
 }
 
 .logo {

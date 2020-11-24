@@ -37,12 +37,18 @@ const Home: React.FC<HomeProps> = (props) => {
         <div className={styles.grid}>
           {props.posts.map((p: Post) => {
             return (
-              <Link href={`/post/${p.id}`} key={p.id}>
-                <a className={styles.card}>
-                  <h3>{p.title} &rarr;</h3>
-                  <p>{p.excerpt}</p>
-                </a>
-              </Link>
+              <a className={styles.card}>
+                <h3>{p.title}</h3>
+                <p>{p.excerpt}</p>
+                <div className="buttons">
+                  <Link href={`/post_ssr/${p.id}`} key={p.id}>
+                    <button>Open SSR</button>
+                  </Link>
+                  <Link href={`/post_inc/${p.id}`} key={p.id}>
+                    <button>Open static</button>
+                  </Link>
+                </div>
+              </a>
             )
           })}
         </div>
