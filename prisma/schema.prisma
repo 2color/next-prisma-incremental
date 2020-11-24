@@ -11,7 +11,15 @@ generator client {
 }
 
 model Post {
+  id       Int       @id @default(autoincrement())
+  title    String
+  excerpt  String
+  comments Comment[]
+}
+
+model Comment {
   id      Int    @id @default(autoincrement())
-  title   String
-  excerpt String
+  comment String
+  postId  Int
+  post    Post   @relation(fields: [postId], references: [id])
 }

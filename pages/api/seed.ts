@@ -3,17 +3,22 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { title } from 'process'
 import { posts } from '../../data/posts'
 
-const prisma = new PrismaClient()
-
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const prisma = new PrismaClient()
+  await prisma.$transaction([
+    prisma.comment.deleteMany({}),
+    prisma.post.deleteMany({}),
+  ])
   const promises = []
-  promises.push(prisma.post.deleteMany({}))
   for (const post of posts) {
     promises.push(
       prisma.post.create({
         data: {
           title: post.title,
           excerpt: post.excerpt,
+          comments: {
+            create: post.comments.map((comment) => ({ comment })),
+          },
         },
       }),
     )
