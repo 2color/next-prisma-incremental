@@ -11,7 +11,20 @@ export default async function handle(
     const post = await prisma.post.create({
       data: {
         title: `New Post ✍️`,
-        excerpt: `This is a sample post (created: ${new Date().toUTCString()})`
+        excerpt: `This is a sample post (created: ${new Date().toUTCString()})`,
+        comments: {
+          create: [
+            {
+              comment: 'Comment 1'
+            },
+            {
+              comment: 'Comment 2'
+            },
+            {
+              comment: 'Comment 3'
+            },
+          ]
+        }
       }
     });
     res.json(post);

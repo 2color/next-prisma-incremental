@@ -1,9 +1,8 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
-import Head from 'next/head'
-import Router, { useRouter } from 'next/router'
-import styles from '../../styles/Main.module.css'
-import { Post } from '../../data/posts'
-import { PrismaClient } from '@prisma/client'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import PostComponent from '../../components/post'
+import { useRouter } from 'next/router'
+import { PrismaClient, Post, Comment } from '@prisma/client'
+import { deletePost, submitComment } from '../../lib/api'
 
 const prisma = new PrismaClient()
 
@@ -17,18 +16,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { id: String(post.id) },
   }))
 
-  return { 
-    paths, 
+  return {
+    paths,
     // If an ID is requested that isn't defined here, fallback will incrementally generate the page
-    fallback: true 
+    fallback: true,
   }
 }
 
 // This also gets called at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const matchedPost = await prisma.post.findOne({
+  const matchedPost = await prisma.post.findUnique({
     where: {
       id: Number(params.id),
+    },
+    include: {
+      comments: true,
     },
   })
   return {
@@ -38,8 +40,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 }
 
-interface PostPageProps {
-  post: Post
+type PostPageProps = {
+  post: Post & {
+    comments: Comment[]
+  }
 }
 
 const PostPage: React.FC<PostPageProps> = (props) => {
@@ -52,28 +56,12 @@ const PostPage: React.FC<PostPageProps> = (props) => {
   }
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>{props.post.title}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <h1>{props.post.title}</h1>
-      <p>{props.post.excerpt}</p>
-      <button
-        className={styles.deleteButton}
-        onClick={() => deletePost(props.post.id)}
-      >
-        Delete Post
-      </button>
-    </div>
+    <PostComponent
+      post={props.post}
+      onDeletePost={deletePost}
+      onSubmitComment={submitComment}
+    />
   )
 }
 
 export default PostPage
-
-const deletePost = async (id: number): Promise<void> => {
-  await fetch(`/api/post/${id}`, {
-    method: 'DELETE',
-  })
-  Router.push('/')
-}

@@ -125,6 +125,16 @@
   height: 1em;
 }
 
+.commentForm {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0;
+}
+
+.commentForm input {
+  margin: 0 1rem;
+}
+
 .deleteButton {
   color: white;
   background: red;
