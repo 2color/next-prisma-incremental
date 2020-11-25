@@ -9,7 +9,7 @@ type PostProps = {
     comments: Comment[]
   }
   onDeletePost: (id: number) => Promise<void>
-  onSubmitComment: (postId: number, comment: string) => Promise<void>
+  onSubmitComment: (postId: number, comment: string) => Promise<Comment>
 }
 
 const PostComponent: React.FC<PostProps> = ({
@@ -17,11 +17,14 @@ const PostComponent: React.FC<PostProps> = ({
   onDeletePost,
   onSubmitComment,
 }) => {
+  const [comments, setComments] = useState(post.comments || [])
   const [comment, setComment] = useState('')
   const onSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault()
-      onSubmitComment(post.id, comment)
+      const createdComment = await onSubmitComment(post.id, comment)
+      setComment('')
+      setComments([...comments, createdComment])
     },
     [onSubmitComment, comment],
   )
@@ -33,7 +36,7 @@ const PostComponent: React.FC<PostProps> = ({
       </Head>
       <h1>{post.title}</h1>
       <p>{post.excerpt}</p>
-      {post.comments.length ? <Comments comments={post.comments} /> : null}
+      {comments.length ? <Comments comments={comments} /> : null}
       <form className={styles.commentForm} onSubmit={onSubmit}>
         <input
           id="comment"

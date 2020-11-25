@@ -11,7 +11,7 @@ export default async function handle(
     const comment = body.comment as string
     const postId = body.postId as number
 
-    const comment = await prisma.comment.create({
+    const createdComment = await prisma.comment.create({
       data: {
         comment,
         post: {
@@ -21,7 +21,7 @@ export default async function handle(
         },
       },
     })
-    res.json(comment)
+    res.json(createdComment)
   } else {
     throw new Error(
       `The HTTP ${req.method} method is not supported at this route.`,
