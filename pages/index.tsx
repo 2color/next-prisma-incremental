@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 import styles from '../styles/Main.module.css'
-import { Post } from './../data/posts'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Post } from '@prisma/client'
 import Router from 'next/router'
 import { useState } from 'react'
+import { createPost, deletePost, resetPosts } from '../lib/api'
 
 const prisma = new PrismaClient()
 
@@ -24,7 +24,7 @@ export const getStaticProps: GetStaticProps = async () => {
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
     // - At most once every second
-    revalidate: 5,
+    revalidate: 1,
   }
 }
 
@@ -108,27 +108,6 @@ const Home: React.FC<HomeProps> = (props) => {
       </main>
     </div>
   )
-}
-const createPost = async (setLoading): Promise<void> => {
-  setLoading(true)
-  await fetch(`/api/post`, {
-    method: 'POST',
-  })
-  setLoading(false)
-}
-
-const resetPosts = async (): Promise<void> => {
-  await fetch(`/api/seed`, {
-    method: 'POST',
-  })
-  Router.reload()
-}
-
-const deletePost = async (id: number): Promise<void> => {
-  await fetch(`/api/post/${id}`, {
-    method: 'DELETE',
-  })
-  Router.reload()
 }
 
 export default Home

@@ -19,3 +19,18 @@ export const submitComment = async (
   const responseBody = await response.json()
   return responseBody
 }
+
+export const createPost = async (setLoading): Promise<void> => {
+  setLoading(true)
+  await fetch(`/api/post`, {
+    method: 'POST',
+  })
+  setLoading(false)
+}
+
+export const resetPosts = async (): Promise<void> => {
+  await fetch(`/api/seed`, {
+    method: 'POST',
+  })
+  Router.reload()
+}
