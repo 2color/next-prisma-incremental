@@ -6,7 +6,7 @@ import Head from 'next/head'
 
 type PostProps = {
   post: Post & {
-    comments: Comment[]
+    comments: Comment[] | null
   }
   onDeletePost: (id: number) => Promise<void>
   onSubmitComment: (postId: number, comment: string) => Promise<Comment>
@@ -36,7 +36,7 @@ const PostComponent: React.FC<PostProps> = ({
       </Head>
       <h1>{post.title}</h1>
       <p>{post.excerpt}</p>
-      {comments.length ? <Comments comments={comments} /> : null}
+      {comments?.length ? <Comments comments={comments} /> : null}
       <form className={styles.commentForm} onSubmit={onSubmit}>
         <input
           id="comment"
@@ -46,7 +46,7 @@ const PostComponent: React.FC<PostProps> = ({
           value={comment}
           onChange={(e) => {
             console.log(e.target.value)
-            setComment(e.target.value) 
+            setComment(e.target.value)
           }}
         />
         <button className={styles.navigationButton} type="submit">

@@ -8,8 +8,12 @@ const prisma = new PrismaClient()
 
 // This function gets called at build time
 export const getStaticPaths: GetStaticPaths = async () => {
-  // Call an external API endpoint to get posts
-  const posts = await prisma.post.findMany()
+  // Fetch existing posts from the database
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true
+    }
+  })
 
   // Get the paths we want to pre-render based on posts
   const paths = posts.map((post) => ({
@@ -37,6 +41,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       post: matchedPost,
     },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every second
     revalidate: 1,
   }
 }

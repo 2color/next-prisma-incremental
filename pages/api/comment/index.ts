@@ -1,12 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
+
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   if (req.method === 'POST') {
-    const prisma = new PrismaClient()
     const body = JSON.parse(req.body)
     const comment = body.comment as string
     const postId = body.postId as number

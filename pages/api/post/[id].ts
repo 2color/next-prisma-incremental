@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
+
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   const postId = req.query.id
   if (req.method === 'DELETE') {
-    const prisma = new PrismaClient()
     await prisma.$transaction([
       prisma.comment.deleteMany({
         where: {
