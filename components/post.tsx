@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import Loader from 'react-loader-spinner'
 import styles from '../styles/Main.module.css'
 import { Post, Comment } from '@prisma/client'
 import Comments from './comments'
@@ -17,12 +18,16 @@ const PostComponent: React.FC<PostProps> = ({
   onDeletePost,
   onSubmitComment,
 }) => {
+  const [isPostingComment, setPostingComment] = useState(false)
   const [comments, setComments] = useState(post.comments || [])
   const [comment, setComment] = useState('')
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault()
+      if(comment.length === 0) return
+      setPostingComment(true)
       const createdComment = await onSubmitComment(post.id, comment)
+      setPostingComment(false)
       setComment('')
       setComments([...comments, createdComment])
     },
@@ -49,7 +54,14 @@ const PostComponent: React.FC<PostProps> = ({
             setComment(e.target.value)
           }}
         />
-        <button className={styles.navigationButton} type="submit">
+        <button disabled={comment.length === 0} className={styles.createButton} type="submit">
+          <Loader
+            visible={isPostingComment}
+            type="Oval"
+            color="white"
+            height="15"
+            width="15"
+          />{' '}
           Submit
         </button>
       </form>

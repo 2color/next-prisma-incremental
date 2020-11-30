@@ -161,6 +161,10 @@
   margin-right: 5px;
 }
 
+.createButton div {
+  height: 0;
+}
+
 .createButton {
   display: flex;
   flex-direction: row;
@@ -171,6 +175,11 @@
   padding: 10px 15px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.createButton:disabled {
+  background: #008815;
+  cursor: default;
 }
 
 @media (max-width: 600px) {
