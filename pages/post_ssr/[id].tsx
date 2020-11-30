@@ -11,7 +11,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       id: Number(params.id),
     },
     include: {
-      comments: true,
+      comments: {
+        orderBy: {
+          id: 'asc',
+        },
+      },
     },
   })
   return {

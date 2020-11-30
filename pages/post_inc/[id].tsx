@@ -11,8 +11,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   // Fetch existing posts from the database
   const posts = await prisma.post.findMany({
     select: {
-      id: true
-    }
+      id: true,
+    },
   })
 
   // Get the paths we want to pre-render based on posts
@@ -34,7 +34,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       id: Number(params.id),
     },
     include: {
-      comments: true,
+      comments: {
+        orderBy: {
+          id: 'asc'
+        }
+      }
     },
   })
   return {
