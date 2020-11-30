@@ -12,7 +12,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
       <h2>Comments</h2>
       <ul>
         {props.comments.map((comment) => (
-          <li id={`comment.id`}>{comment.comment}</li>
+          <li key={`comment.id`}>{comment.comment}</li>
         ))}
       </ul>
     </div>

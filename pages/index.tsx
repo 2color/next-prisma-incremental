@@ -5,7 +5,7 @@ import Loader from 'react-loader-spinner'
 import styles from '../styles/Main.module.css'
 import { PrismaClient, Post } from '@prisma/client'
 import Router from 'next/router'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { createPost, deletePost, resetPosts } from '../lib/api'
 
 const prisma = new PrismaClient()
@@ -33,7 +33,20 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = (props) => {
-  const [isLoading, setLoading] = useState(false)
+  const [isLoadingPost, setLoadingPost] = useState(false)
+  const [isLoadingReset, setLoadingReset] = useState(false)
+
+  const onCreatePost = useCallback(async () => {
+    setLoadingPost(true)
+    await createPost()
+    setLoadingPost(false)
+  }, [setLoadingPost])
+
+  const onResetPosts = useCallback(async () => {
+    setLoadingReset(true)
+    await resetPosts()
+    setLoadingReset(false)
+  }, [setLoadingReset])
 
   return (
     <div className={styles.container}>
@@ -45,15 +58,10 @@ const Home: React.FC<HomeProps> = (props) => {
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to the Blog!</h1>
         <div className={styles.buttons}>
-          <button
-            className={styles.createButton}
-            onClick={() => {
-              createPost(setLoading)
-            }}
-          >
+          <button className={styles.createButton} onClick={onCreatePost}>
             {
               <Loader
-                visible={isLoading}
+                visible={isLoadingPost}
                 type="Oval"
                 color="white"
                 height="15"
@@ -70,17 +78,26 @@ const Home: React.FC<HomeProps> = (props) => {
           >
             Reload
           </button>
-          <button className={styles.createButton} onClick={resetPosts}>
+          <button className={styles.createButton} onClick={onResetPosts}>
+            {
+              <Loader
+                visible={isLoadingReset}
+                type="Oval"
+                color="white"
+                height="15"
+                width="15"
+              />
+            }{' '}
             Reset Posts
           </button>
         </div>
         <div className={styles.grid}>
           {props.posts.map((p: Post) => {
             return (
-              <a className={styles.card}>
+              <a key={p.id} className={styles.card}>
                 <h3>{p.title}</h3>
                 <p>{p.excerpt}</p>
-                <div className="buttons">
+                <div className={styles.buttons}>
                   <Link href={`/post_ssr/${p.id}`} key={p.id}>
                     <button className={styles.navigationButton}>
                       Open SSR
@@ -92,14 +109,14 @@ const Home: React.FC<HomeProps> = (props) => {
                     </button>
                   </Link>
 
-                  <button
+                  {/* <button
                     className={styles.deleteButton}
                     onClick={() => {
                       deletePost(p.id)
                     }}
                   >
                     Delete Post
-                  </button>
+                  </button> */}
                 </div>
               </a>
             )

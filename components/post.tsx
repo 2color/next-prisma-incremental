@@ -53,12 +53,12 @@ const PostComponent: React.FC<PostProps> = ({
           Submit
         </button>
       </form>
-      {/* <button
+      <button
         className={styles.deleteButton}
         onClick={() => onDeletePost(post.id)}
       >
         Delete Post
-      </button> */}
+      </button>
     </div>
   )
 }
